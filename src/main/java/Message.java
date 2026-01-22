@@ -43,4 +43,12 @@ public class Message {
         return h_line + sb.toString() + h_line;
     }
 
+    public static String deleteTask(Task task, int task_size) {
+        return h_line +
+                "Noted. I've removed this task:\n   " +
+                task +
+                "\n Now you have " + task_size + " in the list." +
+                h_line;
+    }
+
 }

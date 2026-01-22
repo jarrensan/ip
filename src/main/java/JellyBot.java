@@ -75,6 +75,12 @@ public class JellyBot {
                     output = Message.errorMessage(e);
                 }
                 break;
+            case DELETE:
+                try {
+                    output = deleteTask(inputString);
+                } catch (InvalidArgumentException e) {
+                    output = Message.errorMessage(e);
+                }
         }
         printOutput(output);
     }
@@ -145,5 +151,13 @@ public class JellyBot {
         System.out.println(output);
     }
 
+    public static String deleteTask(ArrayList<String> inputString) throws InvalidArgumentException{
+        if (inputString.size() != 2) {
+            throw new InvalidArgumentException();
+        }
+        int ind = Integer.parseInt(inputString.get(1)) - 1;
+        Task task = taskList.remove(ind);
+        return Message.deleteTask(task, taskList.size());
+    }
 
 }
