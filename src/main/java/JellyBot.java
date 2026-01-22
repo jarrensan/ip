@@ -1,4 +1,6 @@
 import exception.InvalidArgumentException;
+import exception.InvalidCommandException;
+import exception.JellyException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,21 +18,23 @@ public class JellyBot {
         while (true) {
             String input = br.readLine();
             if (input.equals("bye")) break;
-            runCommand(input);
-            input = br.readLine();
+            try {
+                runCommand(input);
+            } catch (JellyException e) {
+                printOutput(Message.errorMessage(e));
+            }
         }
         printOutput(Message.bye());
     }
 
-    public static void runCommand(String input) {
+    public static void runCommand(String input) throws InvalidCommandException {
         ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
         String output = "";
         Command command;
         try {
-            command = Command.valueOf(inputString.get(0));
+            command = Command.valueOf(inputString.get(0).toUpperCase());
         } catch (IllegalArgumentException e) {
-            System.out.println("Invalid Command! Please try again!");
-            return;
+            throw new InvalidCommandException();
         }
         switch (command) {
             case LIST:
@@ -38,37 +42,37 @@ public class JellyBot {
                 break;
             case MARK:
                 try {
-                    markTask(inputString);
+                    output = markTask(inputString);
                 } catch (Exception e) {
-                    output = e.getMessage();
+                    output = Message.errorMessage(e);
                 }
                 break;
             case UNMARK:
                 try {
                     output = unmarkTask(inputString);
                 } catch (Exception e) {
-                    output = e.getMessage();
+                    output = Message.errorMessage(e);
                 }
                 break;
             case TODO:
                 try {
-                    addTodoTask(inputString);
+                    output = addTodoTask(inputString, input);
                 } catch (InvalidArgumentException e) {
-                    output = e.getMessage();
+                    output = Message.errorMessage(e);
                 }
                 break;
             case DEADLINE:
                 try {
-                    addDeadlineTask(inputString);
+                    output = addDeadlineTask(inputString, input);
                 } catch (InvalidArgumentException e) {
-                    output = e.getMessage();
+                    output = Message.errorMessage(e);
                 }
                 break;
             case EVENT:
                 try {
-                    addEventTask(inputString);
+                    output = addEventTask(inputString, input);
                 } catch (InvalidArgumentException e) {
-                    output = e.getMessage();
+                    output = Message.errorMessage(e);
                 }
                 break;
         }
@@ -101,16 +105,40 @@ public class JellyBot {
         taskList.add(task);
     }
 
-    public static void addEventTask(ArrayList<String> inputString) throws InvalidArgumentException {
-
+    public static String addEventTask(ArrayList<String> inputString, String input) throws InvalidArgumentException {
+        int fromInd = input.indexOf("/from");
+        int toInd = input.indexOf("/to");
+        if (inputString.size() < 6 || fromInd == -1 || toInd == -1 || fromInd >= toInd) {
+            throw new InvalidArgumentException();
+        }
+        String description = input.substring(5, fromInd).trim();
+        String from = input.substring(fromInd + 5, toInd).trim();
+        String to = input.substring(toInd + 3).trim();
+        Event event = new Event(description, from, to);
+        addTask(event);
+        return Message.addTask(event, taskList.size());
     }
 
-    public static void addDeadlineTask(ArrayList<String> inputString) throws InvalidArgumentException {
-
+    public static String addDeadlineTask(ArrayList<String> inputString, String input) throws InvalidArgumentException {
+        int byInd = input.indexOf("/by");
+        if (inputString.size() < 4 || byInd == -1) {
+            throw new InvalidArgumentException();
+        }
+        String description = input.substring(8, byInd).trim();
+        String by = input.substring(byInd + 3).trim();
+        Deadline deadline = new Deadline(description, by);
+        addTask(deadline);
+        return Message.addTask(deadline, taskList.size());
     }
 
-    public static void addTodoTask(ArrayList<String> inputString) throws InvalidArgumentException {
-
+    public static String addTodoTask(ArrayList<String> inputString, String input) throws InvalidArgumentException {
+        if (inputString.size() < 2) {
+            throw new InvalidArgumentException();
+        }
+        String description = input.substring(4).trim();
+        Todo todo = new Todo(description);
+        addTask(todo);
+        return Message.addTask(todo, taskList.size());
     }
 
     public static void printOutput(String output) {

@@ -21,22 +21,26 @@ public class Message {
 
     public static String addTask(Task task, int task_size) {
         return h_line +
-                " Got it. I've added this task:\n" +
+                " Got it. I've added this task:\n   " +
                 task +
-                "Now you have " + task_size + " in the list." +
+                "\n Now you have " + task_size + " in the list." +
                 h_line;
     }
 
-    public static String printList(ArrayList<Task> taskList) {
-        if (taskList.isEmpty()) return "Empty List! Add some tasks first!";
+    public static String errorMessage(Exception e) {
+        return h_line + e.getMessage() + h_line;
+    }
 
-        StringBuilder sb = new StringBuilder("Here are the tasks in your list: ");
+    public static String printList(ArrayList<Task> taskList) {
+        if (taskList.isEmpty()) return h_line + " Empty List! Add some tasks first!" + h_line;
+
+        StringBuilder sb = new StringBuilder(" Here are the tasks in your list: ");
         for (int i = 0; i < taskList.size(); i++) {
             Task task = taskList.get(i);
             String isDone = " ";
-            sb.append("\n" + (i + 1) + "." + task.toString());
+            sb.append("\n " + (i + 1) + "." + task.toString());
         }
-        return sb.toString();
+        return h_line + sb.toString() + h_line;
     }
 
 }
