@@ -37,50 +37,50 @@ public class JellyBot {
             throw new InvalidCommandException();
         }
         switch (command) {
-            case LIST:
-                output = Message.printList(taskList);
-                break;
-            case MARK:
-                try {
-                    output = markTask(inputString);
-                } catch (Exception e) {
-                    output = Message.errorMessage(e);
-                }
-                break;
-            case UNMARK:
-                try {
-                    output = unmarkTask(inputString);
-                } catch (Exception e) {
-                    output = Message.errorMessage(e);
-                }
-                break;
-            case TODO:
-                try {
-                    output = addTodoTask(inputString, input);
-                } catch (InvalidArgumentException e) {
-                    output = Message.errorMessage(e);
-                }
-                break;
-            case DEADLINE:
-                try {
-                    output = addDeadlineTask(inputString, input);
-                } catch (InvalidArgumentException e) {
-                    output = Message.errorMessage(e);
-                }
-                break;
-            case EVENT:
-                try {
-                    output = addEventTask(inputString, input);
-                } catch (InvalidArgumentException e) {
-                    output = Message.errorMessage(e);
-                }
-                break;
-            case DELETE:
-                try {
-                    output = deleteTask(inputString);
-                } catch (InvalidArgumentException e) {
-                    output = Message.errorMessage(e);
-                }
+        case LIST:
+            output = Message.printList(taskList);
+            break;
+        case MARK:
+            try {
+                output = markTask(inputString);
+            } catch (Exception e) {
+                output = Message.errorMessage(e);
+            }
+            break;
+        case UNMARK:
+            try {
+                output = unmarkTask(inputString);
+            } catch (Exception e) {
+                output = Message.errorMessage(e);
+            }
+            break;
+        case TODO:
+            try {
+                output = addTodoTask(inputString, input);
+            } catch (InvalidArgumentException e) {
+                output = Message.errorMessage(e);
+            }
+            break;
+        case DEADLINE:
+            try {
+                output = addDeadlineTask(inputString, input);
+            } catch (InvalidArgumentException e) {
+                output = Message.errorMessage(e);
+            }
+            break;
+        case EVENT:
+            try {
+                output = addEventTask(inputString, input);
+            } catch (InvalidArgumentException e) {
+                output = Message.errorMessage(e);
+            }
+            break;
+        case DELETE:
+            try {
+                output = deleteTask(inputString);
+            } catch (InvalidArgumentException e) {
+                output = Message.errorMessage(e);
+            }
         }
         printOutput(output);
     }
