@@ -1,4 +1,4 @@
-public class Task {
+public abstract class Task {
     protected String description;
     protected boolean isDone;
 
@@ -17,6 +17,10 @@ public class Task {
 
     public void unmarkDone() {
         isDone = false;
+    }
+
+    public String toSave() {
+        return getStatusIcon() + " | " + description;
     }
 
     @Override

@@ -5,14 +5,20 @@ import exception.JellyException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class JellyBot {
+public class Jelly {
     private static final ArrayList<Task> taskList = new ArrayList<>();
+    private static Storage st;
 
     public static void main(String[] args) throws IOException {
+        st = new Storage();
+        try {
+            st.createFile("data/Jelly.txt");
+        } catch (JellyException e) {
+            printOutput(Message.errorMessage(e));
+        }
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         printOutput(Message.greeting());
         while (true) {

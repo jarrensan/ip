@@ -4,9 +4,16 @@ public class Todo extends Task{
     }
 
     @Override
+    public String toSave() {
+        return "T | " + super.toSave();
+    }
+
+    @Override
     public String toString() {
         return "[T]" + super.toString();
     }
+
+
 
 }
 
