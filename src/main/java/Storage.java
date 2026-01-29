@@ -3,6 +3,8 @@ import exception.JellyException;
 import exception.WriteFileException;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Storage {
@@ -58,11 +60,13 @@ public class Storage {
         boolean isMark = s[1].equals("1");
         String desc = s[2];
         if (type.equals("D")) {
-            String by = s[3].substring(3);
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+            LocalDate by = LocalDate.parse(s[3].substring(3).trim(), format);
             task = new Deadline(desc, by);
         } else if (type.equals("E")) {
-            String from = s[3].substring(5).trim();
-            String to = s[4].substring(3);
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+            LocalDate from = LocalDate.parse(s[3].substring(5).trim(), format);
+            LocalDate to = LocalDate.parse(s[4].substring(3).trim(), format);
             task = new Event(desc, from, to);
         } else if (type.equals("T")) {
             task = new Todo(desc);
