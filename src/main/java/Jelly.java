@@ -1,7 +1,6 @@
 import exception.InvalidArgumentException;
 import exception.InvalidCommandException;
 import exception.JellyException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,16 +8,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Jelly {
-    private static final ArrayList<Task> taskList = new ArrayList<>();
+    private static ArrayList<Task> taskList;
     private static Storage st;
 
     public static void main(String[] args) throws IOException {
         st = new Storage();
         try {
             st.createFile("data/Jelly.txt");
+            taskList = st.loadTasks();
         } catch (JellyException e) {
             printOutput(Message.errorMessage(e));
         }
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         printOutput(Message.greeting());
         while (true) {
@@ -33,7 +34,7 @@ public class Jelly {
         printOutput(Message.bye());
     }
 
-    public static void runCommand(String input) throws InvalidCommandException {
+    public static void runCommand(String input) throws JellyException {
         ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
         String output = "";
         Command command;
@@ -49,14 +50,14 @@ public class Jelly {
         case MARK:
             try {
                 output = markTask(inputString);
-            } catch (Exception e) {
+            } catch (JellyException e) {
                 output = Message.errorMessage(e);
             }
             break;
         case UNMARK:
             try {
                 output = unmarkTask(inputString);
-            } catch (Exception e) {
+            } catch (JellyException e) {
                 output = Message.errorMessage(e);
             }
             break;
@@ -88,6 +89,7 @@ public class Jelly {
                 output = Message.errorMessage(e);
             }
         }
+        st.writeFile(taskList);
         printOutput(output);
     }
 
@@ -165,5 +167,6 @@ public class Jelly {
         Task task = taskList.remove(ind);
         return Message.deleteTask(task, taskList.size());
     }
+
 
 }

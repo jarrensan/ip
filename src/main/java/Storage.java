@@ -27,7 +27,7 @@ public class Storage {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < taskList.size(); i++) {
             Task t = taskList.get(i);
-            sb.append(i + 1).append(". ").append(t.toSave()).append("\n");
+            sb.append(t.toSave()).append("\n");
         }
 
         try {
@@ -45,12 +45,34 @@ public class Storage {
         String line;
         while ((line = br.readLine()) != null) {
             Task task = getTask(line);
+            taskList.add(task);
         }
 
         return taskList;
     }
 
-    public Task getTask(String line) {
+    public Task getTask(String line) throws JellyException{
+        Task task;
+        String[] s = line.split(" \\| ");
+        String type = s[0];
+        boolean isMark = s[1].equals("1");
+        String desc = s[2];
+        if (type.equals("D")) {
+            String by = s[3].substring(3);
+            task = new Deadline(desc, by);
+        } else if (type.equals("E")) {
+            String from = s[3].substring(5).trim();
+            String to = s[4].substring(3);
+            task = new Event(desc, from, to);
+        } else if (type.equals("T")) {
+            task = new Todo(desc);
+        } else {
+            throw new JellyException("Error Occurred!");
+        }
 
+        if (isMark) {
+            task.markDone();
+        }
+        return task;
     }
 }

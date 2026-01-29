@@ -11,6 +11,9 @@ public abstract class Task {
         return (isDone ? "X" : " "); // mark done task with X
     }
 
+    public String getSaveStatusIcon() {
+        return (isDone ? "1" : "0");
+    }
     public void markDone() {
         isDone = true;
     }
@@ -20,7 +23,7 @@ public abstract class Task {
     }
 
     public String toSave() {
-        return getStatusIcon() + " | " + description;
+        return getSaveStatusIcon() + " | " + description;
     }
 
     @Override

@@ -9,7 +9,7 @@ public class Deadline extends Task {
 
     @Override
     public String toSave() {
-        return "D | " + super.toSave() + " | " + by;
+        return "D | " + super.toSave() + " | " + "by: " + by;
     }
 
     @Override
