@@ -1,11 +1,17 @@
 import exception.InvalidArgumentException;
 import exception.InvalidCommandException;
+import exception.InvalidDateException;
 import exception.JellyException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class Jelly {
     private static ArrayList<Task> taskList;
@@ -119,30 +125,40 @@ public class Jelly {
         taskList.add(task);
     }
 
-    public static String addEventTask(ArrayList<String> inputString, String input) throws InvalidArgumentException {
+    public static String addEventTask(ArrayList<String> inputString, String input) throws JellyException {
         int fromInd = input.indexOf("/from");
         int toInd = input.indexOf("/to");
         if (inputString.size() < 6 || fromInd == -1 || toInd == -1 || fromInd >= toInd) {
             throw new InvalidArgumentException();
         }
-        String description = input.substring(5, fromInd).trim();
-        String from = input.substring(fromInd + 5, toInd).trim();
-        String to = input.substring(toInd + 3).trim();
-        Event event = new Event(description, from, to);
-        addTask(event);
-        return Message.addTask(event, taskList.size());
+        try {
+            String description = input.substring(5, fromInd).trim();
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MMM/yyyy");
+            LocalDate from = LocalDate.parse(input.substring(fromInd + 5, toInd).trim(), format);
+            LocalDate to = LocalDate.parse(input.substring(toInd + 3).trim(), format);
+            Event event = new Event(description, from, to);
+            addTask(event);
+            return Message.addTask(event, taskList.size());
+        } catch (DateTimeParseException e) {
+            throw new InvalidDateException("Correct format: event <description> /from <dd/MMM/yyyy> /to <dd/MMM/yyyy>");
+        }
     }
 
-    public static String addDeadlineTask(ArrayList<String> inputString, String input) throws InvalidArgumentException {
+    public static String addDeadlineTask(ArrayList<String> inputString, String input) throws JellyException {
         int byInd = input.indexOf("/by");
         if (inputString.size() < 4 || byInd == -1) {
             throw new InvalidArgumentException();
         }
-        String description = input.substring(8, byInd).trim();
-        String by = input.substring(byInd + 3).trim();
-        Deadline deadline = new Deadline(description, by);
-        addTask(deadline);
-        return Message.addTask(deadline, taskList.size());
+        try {
+            String description = input.substring(8, byInd).trim();
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MMM/yyyy");
+            LocalDate by = LocalDate.parse(input.substring(byInd + 3).trim(), format);
+            Deadline deadline = new Deadline(description, by);
+            addTask(deadline);
+            return Message.addTask(deadline, taskList.size());
+        } catch (DateTimeParseException e) {
+            throw new InvalidDateException("Correct format: deadline <description> /by <dd/MMM/yyyy>");
+        }
     }
 
     public static String addTodoTask(ArrayList<String> inputString, String input) throws InvalidArgumentException {
