@@ -71,7 +71,7 @@ public class ParserTest {
     public void parse_eventCommand_exceptionThrown() {
         Parser parse = new Parser();
         try {
-            parse.parse("deadline testing /from 01/Mar/2109 /to 02/Testing/2002");
+            parse.parse("event testing /from 01/Mar/2109 /to 02/Testing/2002");
             fail();
         } catch (Exception e) {
             assertEquals("Uh-oh.... Correct format: event <description> /from <dd/MMM/yyyy> /to <dd/MMM/yyyy>",
