@@ -50,7 +50,7 @@ public class Parser {
         case BYE:
             return new ByeCommand();
         default:
-            throw new JellyException("Error! Command not found!");
+            throw new InvalidCommandException();
         }
     }
 

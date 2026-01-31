@@ -17,18 +17,13 @@ import java.util.ArrayList;
 
 public class Storage {
     private File jellyFile;
-    String filePath;
 
-    public Storage(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public void create() throws CreateFileException {
+    public void create(String filePath) throws CreateFileException {
         try {
             this.jellyFile = new File(filePath);
             File parent = jellyFile.getParentFile();
             if (!parent.exists()) {
-                parent.mkdir();
+                parent.mkdirs();
             }
             if (!jellyFile.exists()) {
                 jellyFile.createNewFile();
@@ -40,7 +35,6 @@ public class Storage {
 
     public void write(TaskList taskList) throws WriteFileException {
         String response = taskList.toSaveString();
-
         try {
             FileWriter fw = new FileWriter(jellyFile);
             fw.write(response);
@@ -50,9 +44,8 @@ public class Storage {
         }
     }
 
-    public ArrayList<Task> load() throws JellyException {
+    public TaskList load() throws JellyException {
         try {
-            create();
             BufferedReader br = new BufferedReader(new FileReader(jellyFile));
             ArrayList<Task> tasks = new ArrayList<>();
             String line;
@@ -60,7 +53,7 @@ public class Storage {
                 Task task = getTask(line);
                 tasks.add(task);
             }
-            return tasks;
+            return new TaskList(tasks);
         } catch (IOException e) {
             throw new LoadFileException();
         }

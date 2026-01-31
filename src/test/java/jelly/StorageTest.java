@@ -1,96 +1,69 @@
 package jelly;
 
-import jelly.exception.CreateFileExceptionTest;
-import jelly.exception.JellyExceptionTest;
-import jelly.exception.LoadFileExceptionTest;
-import jelly.exception.WriteFileExceptionTest;
-import jelly.task.TaskTest;
-import jelly.task.TaskListTest;
-import jelly.task.DeadlineTest;
-import jelly.task.EventTest;
-import jelly.task.TodoTest;
+import static org.junit.jupiter.api.Assertions.*;
+
+import jelly.exception.CreateFileException;
+import jelly.exception.JellyException;
+import jelly.exception.LoadFileException;
+import jelly.task.Deadline;
+import jelly.task.Event;
+import jelly.task.Todo;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.io.*;
 
 import java.io.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.nio.file.*;
 
 public class StorageTest {
-    private File jellyFile;
-    String filePath;
+    @TempDir
+    Path tempDir;
 
-    public StorageTest(String filePath) {
-        this.filePath = filePath;
+    @Test
+    public void create_invalidPath_exceptionThrown() {
+        Storage storage = new Storage();
+        Exception e = assertThrows(CreateFileException.class, () -> {
+            storage.create(tempDir.toString());
+        });
+
+        assertEquals("Uh-oh.... Error creating file!", e.getMessage());
     }
 
-    public void create() throws CreateFileExceptionTest {
-        try {
-            this.jellyFile = new File(filePath);
-            File parent = jellyFile.getParentFile();
-            if (!parent.exists()) {
-                parent.mkdir();
-            }
-            if (!jellyFile.exists()) {
-                jellyFile.createNewFile();
-            }
-        } catch (IOException e) {
-            throw new CreateFileExceptionTest();
-        }
+    @Test
+    public void load_missingFile_exceptionThrown() {
+        Storage storage = new Storage();
+
+        assertThrows(LoadFileException.class, () -> {
+            String fakePath = tempDir.resolve("test.txt").toString();
+            storage.create(fakePath);
+
+            File f = new File(fakePath);
+            f.delete();
+
+            storage.load();
+        });
     }
 
-    public void write(TaskListTest taskList) throws WriteFileExceptionTest {
-        String response = taskList.toSaveString();
+    @Test
+    public void getTask_validTodoString_success() throws JellyException {
+        Storage storage = new Storage();
+        String input = "T | 0 | read book";
 
-        try {
-            FileWriter fw = new FileWriter(jellyFile);
-            fw.write(response);
-            fw.close();
-        } catch (IOException e) {
-            throw new WriteFileExceptionTest();
-        }
+        assertInstanceOf(Todo.class, storage.getTask(input));
     }
 
-    public ArrayList<TaskTest> load() throws JellyExceptionTest {
-        try {
-            create();
-            BufferedReader br = new BufferedReader(new FileReader(jellyFile));
-            ArrayList<TaskTest> tasks = new ArrayList<>();
-            String line;
-            while ((line = br.readLine()) != null) {
-                TaskTest task = getTask(line);
-                tasks.add(task);
-            }
-            return tasks;
-        } catch (IOException e) {
-            throw new LoadFileExceptionTest();
-        }
+    @Test
+    public void getTask_validDeadlineString_success() throws JellyException {
+        Storage storage = new Storage();
+        String input = "D | 0 | submit assignment | by: 2025-Oct-15";
+
+        assertInstanceOf(Deadline.class, storage.getTask(input));
     }
 
-    public TaskTest getTask(String line) throws JellyExceptionTest {
-        TaskTest task;
-        String[] s = line.split(" \\| ");
-        String type = s[0];
-        boolean isMark = s[1].equals("1");
-        String desc = s[2];
-        switch (type) {
-            case "D" -> {
-                DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-                LocalDate by = LocalDate.parse(s[3].substring(3).trim(), format);
-                task = new DeadlineTest(desc, by);
-            }
-            case "E" -> {
-                DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-                LocalDate from = LocalDate.parse(s[3].substring(5).trim(), format);
-                LocalDate to = LocalDate.parse(s[4].substring(3).trim(), format);
-                task = new EventTest(desc, from, to);
-            }
-            case "T" -> task = new TodoTest(desc);
-            default -> throw new JellyExceptionTest("Error Occurred!");
-        }
+    @Test
+    public void getTask_validEventString_success() throws JellyException {
+        Storage storage = new Storage();
+        String input = "E | 0 | finish homework | from: 2018-Jan-02 | to: 2022-Feb-04";
 
-        if (isMark) {
-            task.markDone();
-        }
-        return task;
+        assertInstanceOf(Event.class, storage.getTask(input));
     }
 }

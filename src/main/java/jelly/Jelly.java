@@ -10,18 +10,19 @@ import jelly.task.TaskList;
 import jelly.ui.Ui;
 
 public class Jelly {
-    private Storage storage;
     private TaskList taskList;
     private final Ui ui;
     private final Parser parser;
+    private final Storage storage;
 
     public Jelly(String filePath) {
         ui = new Ui();
         parser = new Parser();
+        storage = new Storage();
 
         try {
-            storage = new Storage(filePath);
-            taskList = new TaskList(storage.load());
+            storage.create(filePath);
+            taskList = storage.load();
         } catch (JellyException e) {
             ui.showError(e);
             taskList = new TaskList();
