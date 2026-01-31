@@ -22,7 +22,7 @@ public class StorageTest {
     public void create_invalidPath_exceptionThrown() {
         Storage storage = new Storage();
         Exception e = assertThrows(CreateFileException.class, () -> {
-            storage.create(tempDir.toString());
+            storage.create("??.txt");
         });
 
         assertEquals("Uh-oh.... Error creating file!", e.getMessage());
@@ -33,12 +33,9 @@ public class StorageTest {
         Storage storage = new Storage();
 
         assertThrows(LoadFileException.class, () -> {
-            String fakePath = tempDir.resolve("test.txt").toString();
-            storage.create(fakePath);
-
-            File f = new File(fakePath);
+            storage.create("test.txt");
+            File f = new File("test.txt");
             f.delete();
-
             storage.load();
         });
     }

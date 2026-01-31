@@ -22,7 +22,7 @@ public class Storage {
         try {
             this.jellyFile = new File(filePath);
             File parent = jellyFile.getParentFile();
-            if (!parent.exists()) {
+            if (parent != null && !parent.exists()) {
                 parent.mkdirs();
             }
             if (!jellyFile.exists()) {
