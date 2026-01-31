@@ -1,6 +1,13 @@
-import exception.CreateFileException;
-import exception.JellyException;
-import exception.WriteFileException;
+package jelly;
+
+import jelly.exception.CreateFileException;
+import jelly.exception.JellyException;
+import jelly.exception.LoadFileException;
+import jelly.exception.WriteFileException;
+import jelly.task.Deadline;
+import jelly.task.Event;
+import jelly.task.Task;
+import jelly.task.Todo;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -9,10 +16,15 @@ import java.util.ArrayList;
 
 public class Storage {
     private File jellyFile;
+    String filePath;
 
-    public void createFile(String path) throws CreateFileException {
+    public Storage(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public void create() throws CreateFileException {
         try {
-            this.jellyFile = new File(path);
+            this.jellyFile = new File(filePath);
             File parent = jellyFile.getParentFile();
             if (!parent.exists()) {
                 parent.mkdir();
@@ -25,7 +37,7 @@ public class Storage {
         }
     }
 
-    public void writeFile(ArrayList<Task> taskList) throws WriteFileException {
+    public void write(ArrayList<Task> taskList) throws WriteFileException {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < taskList.size(); i++) {
             Task t = taskList.get(i);
@@ -41,16 +53,20 @@ public class Storage {
         }
     }
 
-    public ArrayList<Task> loadTasks() throws JellyException, IOException {
-        BufferedReader br = new BufferedReader(new FileReader(jellyFile));
-        ArrayList<Task> taskList = new ArrayList<>();
-        String line;
-        while ((line = br.readLine()) != null) {
-            Task task = getTask(line);
-            taskList.add(task);
+    public ArrayList<Task> load() throws JellyException {
+        try {
+            create();
+            BufferedReader br = new BufferedReader(new FileReader(jellyFile));
+            ArrayList<Task> tasks = new ArrayList<>();
+            String line;
+            while ((line = br.readLine()) != null) {
+                Task task = getTask(line);
+                tasks.add(task);
+            }
+            return tasks;
+        } catch (IOException e) {
+            throw new LoadFileException();
         }
-
-        return taskList;
     }
 
     public Task getTask(String line) throws JellyException{

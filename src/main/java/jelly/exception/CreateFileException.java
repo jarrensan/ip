@@ -1,4 +1,4 @@
-package exception;
+package jelly.exception;
 
 public class CreateFileException extends JellyException {
     public CreateFileException() {
