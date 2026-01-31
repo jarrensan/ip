@@ -1,0 +1,26 @@
+package jelly.command;
+import jelly.Storage;
+import jelly.exception.JellyException;
+import jelly.task.Deadline;
+import jelly.task.TaskList;
+import jelly.ui.Ui;
+
+import java.time.LocalDate;
+
+
+public class DeadlineCommand extends Command{
+    private final String description;
+    private final LocalDate by;
+
+    public DeadlineCommand(String description, LocalDate by) {
+        this.description = description;
+        this.by = by;
+    }
+
+    @Override
+    public String execute(TaskList taskList, Ui ui, Storage storage) throws JellyException {
+        Deadline deadline = taskList.addDeadline(description, by);
+        storage.write(taskList);
+        return ui.showAddTask(deadline, taskList.getSize());
+    }
+}

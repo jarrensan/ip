@@ -1,7 +1,9 @@
+package jelly.task;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Event extends Task{
+public class Event extends Task {
     private LocalDate from, to;
 
     public Event(String description, LocalDate from, LocalDate to) {

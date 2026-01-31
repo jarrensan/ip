@@ -1,4 +1,4 @@
-package exception;
+package jelly.exception;
 
 public class JellyException extends Exception{
     public JellyException(String s) {
