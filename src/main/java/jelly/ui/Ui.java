@@ -1,20 +1,15 @@
 package jelly.ui;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 import jelly.task.Task;
 import jelly.task.TaskList;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-
 public class Ui {
-
-    BufferedReader br;
-
-    public Ui() {
-        br = new BufferedReader(new InputStreamReader(System.in));
-    }
     private static final String h_line = "\n____________________________________________________________\n";
+
+
 
     public String showGreeting() {
         return h_line + " Hello! I'm JellyBot\n What can I do for you?" + h_line;
@@ -34,10 +29,8 @@ public class Ui {
 
     public String showAddTask(Task task, int task_size) {
         return h_line +
-                " Got it. I've added this task:\n   " +
-                task +
-                "\n Now you have " + task_size + " in the list." +
-                h_line;
+                " Got it. I've added this task:\n   " + task
+                + "\n Now you have " + task_size + " in the list." + h_line;
     }
 
     public String showError(Exception e) {
@@ -54,10 +47,8 @@ public class Ui {
 
     public String showDeleteTask(Task task, int task_size) {
         return h_line +
-                "Noted. I've removed this task:\n   " +
-                task +
-                "\n Now you have " + task_size + " in the list." +
-                h_line;
+                "Noted. I've removed this task:\n   " + task
+                + "\n Now you have " + task_size + " in the list." + h_line;
     }
 
 }

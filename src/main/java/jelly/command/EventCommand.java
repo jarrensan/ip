@@ -1,13 +1,14 @@
 package jelly.command;
 
 import java.time.LocalDate;
+
 import jelly.Storage;
 import jelly.exception.JellyException;
 import jelly.task.Event;
 import jelly.task.TaskList;
 import jelly.ui.Ui;
 
-public class EventCommand extends Command{
+public class EventCommand extends Command {
     private final String description;
     private final LocalDate from;
     private final LocalDate to;

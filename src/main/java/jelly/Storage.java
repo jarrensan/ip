@@ -10,7 +10,13 @@ import jelly.task.Deadline;
 import jelly.task.Event;
 import jelly.task.Todo;
 
-import java.io.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -65,20 +71,23 @@ public class Storage {
         String type = s[0];
         boolean isMark = s[1].equals("1");
         String desc = s[2];
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+
         switch (type) {
-            case "D" -> {
-                DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-                LocalDate by = LocalDate.parse(s[3].substring(3).trim(), format);
-                task = new Deadline(desc, by);
-            }
-            case "E" -> {
-                DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-                LocalDate from = LocalDate.parse(s[3].substring(5).trim(), format);
-                LocalDate to = LocalDate.parse(s[4].substring(3).trim(), format);
-                task = new Event(desc, from, to);
-            }
-            case "T" -> task = new Todo(desc);
-            default -> throw new JellyException("Error Occurred!");
+        case "D":
+            LocalDate by = LocalDate.parse(s[3].substring(3).trim(), format);
+            task = new Deadline(desc, by);
+            break;
+        case "E":
+            LocalDate from = LocalDate.parse(s[3].substring(5).trim(), format);
+            LocalDate to = LocalDate.parse(s[4].substring(3).trim(), format);
+            task = new Event(desc, from, to);
+            break;
+        case "T":
+            task = new Todo(desc);
+            break;
+        default:
+            throw new JellyException("Error Occurred!");
         }
 
         if (isMark) {

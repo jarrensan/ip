@@ -6,7 +6,7 @@ import jelly.task.TaskList;
 import jelly.task.Todo;
 import jelly.ui.Ui;
 
-public class TodoCommand extends Command{
+public class TodoCommand extends Command {
 
     private final String description;
 

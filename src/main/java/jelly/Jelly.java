@@ -30,9 +30,9 @@ public class Jelly {
     }
 
     public void run() throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         printOutput(ui.showGreeting());
 
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             String input = br.readLine();
             try {
