@@ -4,10 +4,7 @@ import jelly.exception.CreateFileException;
 import jelly.exception.JellyException;
 import jelly.exception.LoadFileException;
 import jelly.exception.WriteFileException;
-import jelly.task.Deadline;
-import jelly.task.Event;
-import jelly.task.Task;
-import jelly.task.Todo;
+import jelly.task.*;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -37,16 +34,12 @@ public class Storage {
         }
     }
 
-    public void write(ArrayList<Task> taskList) throws WriteFileException {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < taskList.size(); i++) {
-            Task t = taskList.get(i);
-            sb.append(t.toSave()).append("\n");
-        }
+    public void write(TaskList taskList) throws WriteFileException {
+        String response = taskList.toSaveString();
 
         try {
             FileWriter fw = new FileWriter(jellyFile);
-            fw.write(sb.toString());
+            fw.write(response);
             fw.close();
         } catch (IOException e) {
             throw new WriteFileException();
@@ -75,19 +68,20 @@ public class Storage {
         String type = s[0];
         boolean isMark = s[1].equals("1");
         String desc = s[2];
-        if (type.equals("D")) {
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-            LocalDate by = LocalDate.parse(s[3].substring(3).trim(), format);
-            task = new Deadline(desc, by);
-        } else if (type.equals("E")) {
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-            LocalDate from = LocalDate.parse(s[3].substring(5).trim(), format);
-            LocalDate to = LocalDate.parse(s[4].substring(3).trim(), format);
-            task = new Event(desc, from, to);
-        } else if (type.equals("T")) {
-            task = new Todo(desc);
-        } else {
-            throw new JellyException("Error Occurred!");
+        switch (type) {
+            case "D" -> {
+                DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+                LocalDate by = LocalDate.parse(s[3].substring(3).trim(), format);
+                task = new Deadline(desc, by);
+            }
+            case "E" -> {
+                DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+                LocalDate from = LocalDate.parse(s[3].substring(5).trim(), format);
+                LocalDate to = LocalDate.parse(s[4].substring(3).trim(), format);
+                task = new Event(desc, from, to);
+            }
+            case "T" -> task = new Todo(desc);
+            default -> throw new JellyException("Error Occurred!");
         }
 
         if (isMark) {

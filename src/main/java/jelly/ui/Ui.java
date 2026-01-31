@@ -1,6 +1,7 @@
 package jelly.ui;
 
 import jelly.task.Task;
+import jelly.task.TaskList;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -43,16 +44,12 @@ public class Ui {
         return h_line + e.getMessage() + h_line;
     }
 
-    public String showPrintList(ArrayList<Task> taskList) {
-        if (taskList.isEmpty()) return h_line + " Empty List! Add some tasks first!" + h_line;
-
-        StringBuilder sb = new StringBuilder(" Here are the tasks in your list: ");
-        for (int i = 0; i < taskList.size(); i++) {
-            Task task = taskList.get(i);
-            String isDone = " ";
-            sb.append("\n " + (i + 1) + "." + task.toString());
+    public String showList(TaskList taskList) {
+        if (taskList.isEmpty()) {
+            return h_line + " Empty List! Add some tasks first!" + h_line;
         }
-        return h_line + sb.toString() + h_line;
+
+        return h_line + " Here are the tasks in your list: " + taskList.toString() + h_line;
     }
 
     public String showDeleteTask(Task task, int task_size) {
