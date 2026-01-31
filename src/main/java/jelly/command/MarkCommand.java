@@ -6,7 +6,7 @@ import jelly.task.Task;
 import jelly.task.TaskList;
 import jelly.ui.Ui;
 
-public class MarkCommand extends Command{
+public class MarkCommand extends Command {
     private final int index;
 
     public MarkCommand(int index) {

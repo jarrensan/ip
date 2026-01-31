@@ -1,14 +1,14 @@
 package jelly.command;
+
+import java.time.LocalDate;
+
 import jelly.Storage;
 import jelly.exception.JellyException;
 import jelly.task.Deadline;
 import jelly.task.TaskList;
 import jelly.ui.Ui;
 
-import java.time.LocalDate;
-
-
-public class DeadlineCommand extends Command{
+public class DeadlineCommand extends Command {
     private final String description;
     private final LocalDate by;
 

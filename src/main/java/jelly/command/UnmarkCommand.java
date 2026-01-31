@@ -6,7 +6,7 @@ import jelly.task.Task;
 import jelly.task.TaskList;
 import jelly.ui.Ui;
 
-public class UnmarkCommand extends Command{
+public class UnmarkCommand extends Command {
     private final int index;
 
     public UnmarkCommand(int index) {

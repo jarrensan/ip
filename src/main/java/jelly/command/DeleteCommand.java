@@ -6,7 +6,7 @@ import jelly.task.Task;
 import jelly.task.TaskList;
 import jelly.ui.Ui;
 
-public class DeleteCommand extends Command{
+public class DeleteCommand extends Command {
 
     private final int index;
 

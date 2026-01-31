@@ -1,13 +1,13 @@
 package jelly;
 
-import jelly.command.Command;
-import jelly.exception.JellyException;
-import jelly.task.*;
-import jelly.ui.Ui;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import jelly.command.Command;
+import jelly.exception.JellyException;
+import jelly.task.TaskList;
+import jelly.ui.Ui;
 
 public class Jelly {
     private Storage storage;
@@ -38,7 +38,9 @@ public class Jelly {
                 Command command = parser.parse(input);
                 String output = command.execute(taskList, ui, storage);
                 printOutput(output);
-                if (command.isExit()) break;
+                if (command.isExit()) {
+                    break;
+                }
             } catch (JellyException e) {
                 printOutput(ui.showError(e));
             }

@@ -2,12 +2,9 @@ package jelly.command;
 
 import jelly.Storage;
 import jelly.exception.JellyException;
-import jelly.task.Event;
 import jelly.task.TaskList;
 import jelly.task.Todo;
 import jelly.ui.Ui;
-
-import java.time.LocalDate;
 
 public class TodoCommand extends Command{
 

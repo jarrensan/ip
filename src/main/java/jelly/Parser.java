@@ -1,6 +1,16 @@
 package jelly;
 
-import jelly.command.*;
+import jelly.command.Command;
+import jelly.command.CommandList;
+import jelly.command.ListCommand;
+import jelly.command.MarkCommand;
+import jelly.command.ByeCommand;
+import jelly.command.UnmarkCommand;
+import jelly.command.EventCommand;
+import jelly.command.TodoCommand;
+import jelly.command.DeadlineCommand;
+import jelly.command.DeleteCommand;
+
 import jelly.exception.InvalidArgumentException;
 import jelly.exception.InvalidCommandException;
 import jelly.exception.InvalidDateException;
@@ -23,28 +33,28 @@ public class Parser {
             throw new InvalidCommandException();
         }
         switch (command) {
-            case LIST:
-                return new ListCommand();
-            case MARK:
-                return markCommandEvent(input);
-            case UNMARK:
-                return unmarkCommandEvent(input);
-            case TODO:
-                return todoCommandEvent(input);
-            case DEADLINE:
-                return deadlineCommandEvent(input);
-            case EVENT:
-                return eventCommandEvent(input);
-            case DELETE:
-                return deleteCommandEvent(input);
-            case BYE:
-                return new ByeCommand();
-            default:
-                throw new JellyException("Error! Command not found!");
+        case LIST:
+            return new ListCommand();
+        case MARK:
+            return markCommandEvent(input);
+        case UNMARK:
+            return unmarkCommandEvent(input);
+        case TODO:
+            return todoCommandEvent(input);
+        case DEADLINE:
+            return deadlineCommandEvent(input);
+        case EVENT:
+            return eventCommandEvent(input);
+        case DELETE:
+            return deleteCommandEvent(input);
+        case BYE:
+            return new ByeCommand();
+        default:
+            throw new JellyException("Error! Command not found!");
         }
     }
 
-    public Command markCommandEvent(String input) throws JellyException{
+    public Command markCommandEvent(String input) throws JellyException {
         ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
         if (inputString.size() != 2) {
             throw new InvalidArgumentException();
@@ -53,7 +63,7 @@ public class Parser {
         return new MarkCommand(ind);
     }
 
-    public Command unmarkCommandEvent(String input) throws JellyException{
+    public Command unmarkCommandEvent(String input) throws JellyException {
         ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
         if (inputString.size() != 2) {
             throw new InvalidArgumentException();
