@@ -1,5 +1,7 @@
 package jelly.task;
 
+import jelly.exception.InvalidArgumentException;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -14,48 +16,102 @@ public class TaskList {
         this.tasks = new ArrayList<>();
     }
 
+    /**
+     * Adds task to existing arraylist of tasks.
+     *
+     * @param task Task to be added.
+     */
     public void addTask(Task task) {
         this.tasks.add(task);
     }
 
+    /**
+     * Returns and add Event task to existing arraylist of tasks from specified arguments.
+     *
+     * @param desc Description of Event task to be added.
+     * @param from Start date of Event task
+     * @param to End date of Event task
+     * @return Event task created from specified input arguments.
+     */
     public Event addEvent(String desc, LocalDate from, LocalDate to) {
         Event event = new Event(desc, from, to);
-        this.tasks.add(event);
+        addTask(event);
         return event;
     }
 
-    public Todo addTodo(String description) {
-        Todo todo = new Todo(description);
-        this.tasks.add(todo);
+    /**
+     * Returns and add Todo task to existing arraylist of tasks from specified arguments.
+     *
+     * @param desc Description of Todo task to be added.
+     * @return Todo task created from specified input arguments.
+     */
+    public Todo addTodo(String desc) {
+        Todo todo = new Todo(desc);
+        addTask(todo);
         return todo;
     }
 
+    /**
+     * Returns and add Deadline task to existing arraylist of tasks from specified arguments.
+     *
+     * @param desc Description of Deadline task to be added.
+     * @param by Completion date of Deadline task
+     * @return Deadline task created from specified input arguments.
+     */
     public Deadline addDeadline(String desc, LocalDate by) {
         Deadline deadline = new Deadline(desc, by);
-        this.tasks.add(deadline);
+        addTask(deadline);
         return deadline;
     }
 
+    /**
+     * Removes task from existing arraylist of tasks from specified index.
+     *
+     * @param index Index of task to be removed
+     * @return Task removed from tasks arraylist.
+     */
     public Task removeTask(int index) {
         return this.tasks.remove(index);
     }
 
+    /**
+     * Marks task as done from existing arraylist of tasks from specified index.
+     *
+     * @param index Index of task to be marked
+     * @return Task marked from tasks arraylist.
+     */
     public Task markTask(int index) {
         Task task = tasks.get(index);
         task.markDone();
         return task;
     }
 
+    /**
+     * Unmarks task as done from existing arraylist of tasks from specified index.
+     *
+     * @param index Index of task to be unmarked
+     * @return Task unmarked from tasks arraylist.
+     */
     public Task unmarkTask(int index) {
         Task task = tasks.get(index);
         task.unmarkDone();
         return task;
     }
 
+    /**
+     * Returns size of the tasklist.
+     *
+     * @return int size of the tasklist.
+     */
     public int getSize() {
         return this.tasks.size();
     }
 
+    /**
+     * Returns true if tasklist is empty, else returns false
+     *
+     * @return boolean indicating if tasklist is empty
+     */
     public boolean isEmpty() {
         return tasks.isEmpty();
     }

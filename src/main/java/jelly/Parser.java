@@ -1,5 +1,12 @@
 package jelly;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import jelly.command.ByeCommand;
 import jelly.command.Command;
 import jelly.command.CommandList;
@@ -13,17 +20,17 @@ import jelly.command.UnmarkCommand;
 
 import jelly.exception.InvalidArgumentException;
 import jelly.exception.InvalidCommandException;
-import jelly.exception.InvalidDateException;
 import jelly.exception.JellyException;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import jelly.exception.InvalidDateException;
 
 public class Parser {
+    /**
+     * Returns subclass of Command based on user's input.
+     *
+     * @param input Raw string data from user's input.
+     * @return subclass of Command.
+     * @throws JellyException If unable to parse command.
+     */
     public Command parse(String input) throws JellyException {
         ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
         String output = "";
@@ -55,32 +62,55 @@ public class Parser {
         }
     }
 
-    public Command markCommandEvent(String input) throws JellyException {
+    /**
+     * Returns MarkCommand based on user's arguments.
+     *
+     * @param input Raw string data from user's input.
+     * @return MarkCommand with saved data.
+     * @throws JellyException If unable to parse command.
+     */
+    public MarkCommand markCommandEvent(String input) throws JellyException {
         ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
         if (inputString.size() != 2) {
             throw new InvalidArgumentException();
         }
-        int ind = Integer.parseInt(inputString.get(1)) - 1;
+        int ind = parseIndex(inputString.get(1));
         return new MarkCommand(ind);
     }
 
-    public Command unmarkCommandEvent(String input) throws JellyException {
+    /**
+     * Returns UnmarkCommand based on user's arguments.
+     *
+     * @param input Raw string data from user's input.
+     * @return UnmarkCommand with saved data.
+     * @throws JellyException If unable to parse command.
+     */
+    public UnmarkCommand unmarkCommandEvent(String input) throws JellyException {
         ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
+
         if (inputString.size() != 2) {
             throw new InvalidArgumentException();
         }
-
-        int ind = Integer.parseInt(inputString.get(1)) - 1;
+        int ind = parseIndex(inputString.get(1));
         return new UnmarkCommand(ind);
     }
 
-    public Command eventCommandEvent(String input) throws JellyException {
+    /**
+     * Returns EventCommand based on user's arguments.
+     *
+     * @param input Raw string data from user's input.
+     * @return EventCommand with saved data.
+     * @throws JellyException If unable to parse command.
+     */
+    public EventCommand eventCommandEvent(String input) throws JellyException {
         ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
         int fromInd = input.indexOf("/from");
         int toInd = input.indexOf("/to");
+
         if (inputString.size() < 6 || fromInd == -1 || toInd == -1 || fromInd >= toInd) {
             throw new InvalidArgumentException();
         }
+
         try {
             String description = input.substring(5, fromInd).trim();
             DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MMM/yyyy");
@@ -92,7 +122,14 @@ public class Parser {
         }
     }
 
-    public Command todoCommandEvent(String input) throws InvalidArgumentException {
+    /**
+     * Returns todoCommand based on user's arguments.
+     *
+     * @param input Raw string data from user's input.
+     * @return todoCommand with saved data.
+     * @throws InvalidArgumentException If unable to parse argument.
+     */
+    public TodoCommand todoCommandEvent(String input) throws InvalidArgumentException {
         ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
         if (inputString.size() < 2) {
             throw new InvalidArgumentException();
@@ -101,9 +138,17 @@ public class Parser {
         return new TodoCommand(description);
     }
 
-    public Command deadlineCommandEvent(String input) throws JellyException {
+    /**
+     * Returns DeadlineCommand based on user's arguments.
+     *
+     * @param input Raw string data from user's input.
+     * @return DeadlineCommand with saved data.
+     * @throws JellyException If unable to parse command.
+     */
+    public DeadlineCommand deadlineCommandEvent(String input) throws JellyException {
         ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
         int byInd = input.indexOf("/by");
+
         if (inputString.size() < 4 || byInd == -1) {
             throw new InvalidArgumentException();
         }
@@ -117,12 +162,35 @@ public class Parser {
         }
     }
 
-    public Command deleteCommandEvent(String input) throws InvalidArgumentException {
+    /**
+     * Returns DeleteCommand based on user's arguments.
+     *
+     * @param input Raw string data from user's input.
+     * @return DeleteCommand with saved data.
+     * @throws InvalidArgumentException If unable to parse argument.
+     */
+    public DeleteCommand deleteCommandEvent(String input) throws InvalidArgumentException {
         ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
+
         if (inputString.size() != 2) {
             throw new InvalidArgumentException();
         }
-        int index = Integer.parseInt(inputString.get(1)) - 1;
+        int index = parseIndex(inputString.get(1));
         return new DeleteCommand(index);
+    }
+
+    /**
+     * Returns int based on user's arguments of the task index.
+     *
+     * @param s Raw string data from user's argument of the task index.
+     * @return int of the task index.
+     * @throws InvalidArgumentException If unable to parse index from string to int.
+     */
+    private int parseIndex(String s) throws InvalidArgumentException {
+        try {
+            return Integer.parseInt(s) - 1;
+        } catch (NumberFormatException e) {
+            throw new InvalidArgumentException();
+        }
     }
 }

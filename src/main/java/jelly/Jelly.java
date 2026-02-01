@@ -29,6 +29,9 @@ public class Jelly {
         }
     }
 
+    /**
+     * Run program
+     */
     public void run() throws IOException {
         printOutput(ui.showGreeting());
 
@@ -52,6 +55,11 @@ public class Jelly {
         new Jelly("data/Jelly.txt").run();
     }
 
+    /**
+     * Prints out the line specified in the input param output.
+     *
+     * @param output String data to be outputted.
+     */
     public void printOutput(String output) {
         System.out.println(output);
     }
