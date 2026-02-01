@@ -9,6 +9,10 @@ public abstract class Task {
         this.isDone = false;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public String getStatusIcon() {
         return (isDone ? "X" : " "); // mark done task with X
     }
@@ -16,6 +20,7 @@ public abstract class Task {
     public String getSaveStatusIcon() {
         return (isDone ? "1" : "0");
     }
+
     public void markDone() {
         isDone = true;
     }

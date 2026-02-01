@@ -39,10 +39,16 @@ public class Ui {
         return h_line + " Here are the tasks in your list: " + taskList + h_line;
     }
 
+    public String showFindList(TaskList taskList) {
+        if (taskList.isEmpty()) {
+            return h_line + " No matching tasks found! Please try again." + h_line;
+        }
+        return h_line + " Here are the matching tasks in your list: " + taskList + h_line;
+    }
+
     public String showDeleteTask(Task task, int taskSize) {
         return h_line
                 + "Noted. I've removed this task:\n   " + task
                 + "\n Now you have " + taskSize + " in the list." + h_line;
     }
-
 }

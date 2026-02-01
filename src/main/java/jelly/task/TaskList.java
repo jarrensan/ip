@@ -114,6 +114,16 @@ public class TaskList {
         return tasks.isEmpty();
     }
 
+    public TaskList findTasks(String desc) {
+        TaskList taskList = new TaskList();
+        for (Task task : tasks) {
+            if (task.getDescription().contains(desc)) {
+                taskList.addTask(task);
+            }
+        }
+        return taskList;
+    }
+
     public String toSaveString() {
         StringBuilder sb = new StringBuilder();
         for (Task t : tasks) {
