@@ -1,15 +1,10 @@
 package jelly.ui;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
 import jelly.task.Task;
 import jelly.task.TaskList;
 
 public class Ui {
     private static final String h_line = "\n____________________________________________________________\n";
-
-
 
     public String showGreeting() {
         return h_line + " Hello! I'm JellyBot\n What can I do for you?" + h_line;
@@ -27,10 +22,10 @@ public class Ui {
         return h_line + "OK, I've marked this task as not done yet: \n" + task + h_line;
     }
 
-    public String showAddTask(Task task, int task_size) {
-        return h_line +
-                " Got it. I've added this task:\n   " + task
-                + "\n Now you have " + task_size + " in the list." + h_line;
+    public String showAddTask(Task task, int taskSize) {
+        return h_line
+                + " Got it. I've added this task:\n   " + task
+                + "\n Now you have " + taskSize + " in the list." + h_line;
     }
 
     public String showError(Exception e) {
@@ -41,14 +36,13 @@ public class Ui {
         if (taskList.isEmpty()) {
             return h_line + " Empty List! Add some tasks first!" + h_line;
         }
-
-        return h_line + " Here are the tasks in your list: " + taskList.toString() + h_line;
+        return h_line + " Here are the tasks in your list: " + taskList + h_line;
     }
 
-    public String showDeleteTask(Task task, int task_size) {
-        return h_line +
-                "Noted. I've removed this task:\n   " + task
-                + "\n Now you have " + task_size + " in the list." + h_line;
+    public String showDeleteTask(Task task, int taskSize) {
+        return h_line
+                + "Noted. I've removed this task:\n   " + task
+                + "\n Now you have " + taskSize + " in the list." + h_line;
     }
 
 }

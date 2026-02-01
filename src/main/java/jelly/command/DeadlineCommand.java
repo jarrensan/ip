@@ -2,8 +2,8 @@ package jelly.command;
 
 import java.time.LocalDate;
 
-import jelly.Storage;
 import jelly.exception.JellyException;
+import jelly.storage.Storage;
 import jelly.task.Deadline;
 import jelly.task.TaskList;
 import jelly.ui.Ui;

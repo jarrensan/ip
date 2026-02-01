@@ -1,9 +1,8 @@
-package jelly;
+package jelly.parser;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -17,11 +16,10 @@ import jelly.command.ListCommand;
 import jelly.command.MarkCommand;
 import jelly.command.TodoCommand;
 import jelly.command.UnmarkCommand;
-
 import jelly.exception.InvalidArgumentException;
 import jelly.exception.InvalidCommandException;
-import jelly.exception.JellyException;
 import jelly.exception.InvalidDateException;
+import jelly.exception.JellyException;
 
 public class Parser {
     /**
@@ -33,7 +31,6 @@ public class Parser {
      */
     public Command parse(String input) throws JellyException {
         ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
-        String output = "";
         CommandList command;
         try {
             command = CommandList.valueOf(inputString.get(0).toUpperCase());

@@ -3,6 +3,7 @@ package jelly;
 import static org.junit.jupiter.api.Assertions.*;
 
 import jelly.command.*;
+import jelly.parser.Parser;
 import org.junit.jupiter.api.*;
 
 public class ParserTest {

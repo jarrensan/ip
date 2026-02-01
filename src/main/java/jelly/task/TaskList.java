@@ -1,12 +1,10 @@
 package jelly.task;
 
-import jelly.exception.InvalidArgumentException;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class TaskList {
-    private ArrayList<Task> tasks;
+    private final ArrayList<Task> tasks;
 
     public TaskList(ArrayList<Task> tasks) {
         this.tasks = tasks;
@@ -129,7 +127,6 @@ public class TaskList {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
-            String isDone = " ";
             sb.append("\n ").append(i + 1).append(".").append(task.toString());
         }
         return sb.toString();

@@ -1,8 +1,8 @@
 package jelly.command;
 
-import jelly.Storage;
 import jelly.exception.InvalidTaskNumberException;
 import jelly.exception.JellyException;
+import jelly.storage.Storage;
 import jelly.task.Task;
 import jelly.task.TaskList;
 import jelly.ui.Ui;

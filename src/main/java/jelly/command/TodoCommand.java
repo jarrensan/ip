@@ -1,7 +1,7 @@
 package jelly.command;
 
-import jelly.Storage;
 import jelly.exception.JellyException;
+import jelly.storage.Storage;
 import jelly.task.TaskList;
 import jelly.task.Todo;
 import jelly.ui.Ui;
