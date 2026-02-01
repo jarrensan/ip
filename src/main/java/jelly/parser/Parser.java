@@ -6,16 +6,8 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import jelly.command.ByeCommand;
-import jelly.command.Command;
-import jelly.command.CommandList;
-import jelly.command.DeadlineCommand;
-import jelly.command.DeleteCommand;
-import jelly.command.EventCommand;
-import jelly.command.ListCommand;
-import jelly.command.MarkCommand;
-import jelly.command.TodoCommand;
-import jelly.command.UnmarkCommand;
+import com.sun.jdi.*;
+import jelly.command.*;
 import jelly.exception.InvalidArgumentException;
 import jelly.exception.InvalidCommandException;
 import jelly.exception.InvalidDateException;
@@ -52,6 +44,8 @@ public class Parser {
             return eventCommandEvent(input);
         case DELETE:
             return deleteCommandEvent(input);
+        case FIND:
+            return findCommandEvent(input);
         case BYE:
             return new ByeCommand();
         default:
@@ -174,6 +168,16 @@ public class Parser {
         }
         int index = parseIndex(inputString.get(1));
         return new DeleteCommand(index);
+    }
+
+    public FindCommand findCommandEvent(String input) throws InvalidArgumentException {
+        ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
+
+        if (inputString.size() != 2) {
+            throw new InvalidArgumentException();
+        }
+        String description = inputString.get(1);
+        return new FindCommand(description);
     }
 
     /**
