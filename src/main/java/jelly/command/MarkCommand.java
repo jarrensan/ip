@@ -8,19 +8,19 @@ import jelly.task.TaskList;
 import jelly.ui.Ui;
 
 public class MarkCommand extends Command {
-    private final int index;
+    private final int taskIndex;
 
-    public MarkCommand(int index) {
-        this.index = index;
+    public MarkCommand(int taskIndex) {
+        this.taskIndex = taskIndex;
     }
 
     @Override
     public String execute(TaskList taskList, Ui ui, Storage storage) throws JellyException {
-        if (this.index < 0 || this.index >= taskList.getSize()) {
-            throw new InvalidTaskNumberException(this.index + 1);
+        if (this.taskIndex < 0 || this.taskIndex >= taskList.getSize()) {
+            throw new InvalidTaskNumberException(this.taskIndex + 1);
         }
 
-        Task task = taskList.markTask(index);
+        Task task = taskList.markTask(taskIndex);
         storage.write(taskList);
         return ui.showMarkTask(task);
     }

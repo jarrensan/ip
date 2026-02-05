@@ -6,8 +6,17 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.sun.jdi.*;
-import jelly.command.*;
+import jelly.command.ByeCommand;
+import jelly.command.Command;
+import jelly.command.CommandList;
+import jelly.command.DeadlineCommand;
+import jelly.command.DeleteCommand;
+import jelly.command.EventCommand;
+import jelly.command.FindCommand;
+import jelly.command.ListCommand;
+import jelly.command.MarkCommand;
+import jelly.command.TodoCommand;
+import jelly.command.UnmarkCommand;
 import jelly.exception.InvalidArgumentException;
 import jelly.exception.InvalidCommandException;
 import jelly.exception.InvalidDateException;
@@ -22,10 +31,10 @@ public class Parser {
      * @throws JellyException If unable to parse command.
      */
     public Command parse(String input) throws JellyException {
-        ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
+        ArrayList<String> inputStrings = new ArrayList<>(Arrays.asList(input.split(" ")));
         CommandList command;
         try {
-            command = CommandList.valueOf(inputString.get(0).toUpperCase());
+            command = CommandList.valueOf(inputStrings.get(0).toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new InvalidCommandException();
         }
@@ -61,11 +70,11 @@ public class Parser {
      * @throws JellyException If unable to parse command.
      */
     public MarkCommand markCommandEvent(String input) throws JellyException {
-        ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
-        if (inputString.size() != 2) {
+        ArrayList<String> inputStrings = new ArrayList<>(Arrays.asList(input.split(" ")));
+        if (inputStrings.size() != 2) {
             throw new InvalidArgumentException();
         }
-        int ind = parseIndex(inputString.get(1));
+        int ind = parseIndex(inputStrings.get(1));
         return new MarkCommand(ind);
     }
 
@@ -77,12 +86,12 @@ public class Parser {
      * @throws JellyException If unable to parse command.
      */
     public UnmarkCommand unmarkCommandEvent(String input) throws JellyException {
-        ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
+        ArrayList<String> inputArgs = new ArrayList<>(Arrays.asList(input.split(" ")));
 
-        if (inputString.size() != 2) {
+        if (inputArgs.size() != 2) {
             throw new InvalidArgumentException();
         }
-        int ind = parseIndex(inputString.get(1));
+        int ind = parseIndex(inputArgs.get(1));
         return new UnmarkCommand(ind);
     }
 
@@ -94,20 +103,20 @@ public class Parser {
      * @throws JellyException If unable to parse command.
      */
     public EventCommand eventCommandEvent(String input) throws JellyException {
-        ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
-        int fromInd = input.indexOf("/from");
-        int toInd = input.indexOf("/to");
+        ArrayList<String> inputArgs = new ArrayList<>(Arrays.asList(input.split(" ")));
+        int fromTaskIndex = input.indexOf("/from");
+        int toTaskIndex = input.indexOf("/to");
 
-        if (inputString.size() < 6 || fromInd == -1 || toInd == -1 || fromInd >= toInd) {
+        if (inputArgs.size() < 6 || fromTaskIndex == -1 || toTaskIndex == -1 || fromTaskIndex >= toTaskIndex) {
             throw new InvalidArgumentException();
         }
 
         try {
-            String description = input.substring(5, fromInd).trim();
+            String description = input.substring(5, fromTaskIndex).trim();
             DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MMM/yyyy");
-            LocalDate from = LocalDate.parse(input.substring(fromInd + 5, toInd).trim(), format);
-            LocalDate to = LocalDate.parse(input.substring(toInd + 3).trim(), format);
-            return new EventCommand(description, from, to);
+            LocalDate fromDateTime = LocalDate.parse(input.substring(fromTaskIndex + 5, toTaskIndex).trim(), format);
+            LocalDate toDateTime = LocalDate.parse(input.substring(toTaskIndex + 3).trim(), format);
+            return new EventCommand(description, fromDateTime, toDateTime);
         } catch (DateTimeParseException e) {
             throw new InvalidDateException("Correct format: event <description> /from <dd/MMM/yyyy> /to <dd/MMM/yyyy>");
         }
@@ -121,8 +130,8 @@ public class Parser {
      * @throws InvalidArgumentException If unable to parse argument.
      */
     public TodoCommand todoCommandEvent(String input) throws InvalidArgumentException {
-        ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
-        if (inputString.size() < 2) {
+        ArrayList<String> inputArgs = new ArrayList<>(Arrays.asList(input.split(" ")));
+        if (inputArgs.size() < 2) {
             throw new InvalidArgumentException();
         }
         String description = input.substring(4).trim();
@@ -137,17 +146,17 @@ public class Parser {
      * @throws JellyException If unable to parse command.
      */
     public DeadlineCommand deadlineCommandEvent(String input) throws JellyException {
-        ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
+        ArrayList<String> inputArgs = new ArrayList<>(Arrays.asList(input.split(" ")));
         int byInd = input.indexOf("/by");
 
-        if (inputString.size() < 4 || byInd == -1) {
+        if (inputArgs.size() < 4 || byInd == -1) {
             throw new InvalidArgumentException();
         }
         try {
             String description = input.substring(8, byInd).trim();
             DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MMM/yyyy");
-            LocalDate by = LocalDate.parse(input.substring(byInd + 3).trim(), format);
-            return new DeadlineCommand(description, by);
+            LocalDate byDateTime = LocalDate.parse(input.substring(byInd + 3).trim(), format);
+            return new DeadlineCommand(description, byDateTime);
         } catch (DateTimeParseException e) {
             throw new InvalidDateException("Correct format: deadline <description> /by <dd/MMM/yyyy>");
         }
@@ -161,22 +170,22 @@ public class Parser {
      * @throws InvalidArgumentException If unable to parse argument.
      */
     public DeleteCommand deleteCommandEvent(String input) throws InvalidArgumentException {
-        ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
+        ArrayList<String> inputArgs = new ArrayList<>(Arrays.asList(input.split(" ")));
 
-        if (inputString.size() != 2) {
+        if (inputArgs.size() != 2) {
             throw new InvalidArgumentException();
         }
-        int index = parseIndex(inputString.get(1));
+        int index = parseIndex(inputArgs.get(1));
         return new DeleteCommand(index);
     }
 
     public FindCommand findCommandEvent(String input) throws InvalidArgumentException {
-        ArrayList<String> inputString = new ArrayList<>(Arrays.asList(input.split(" ")));
+        ArrayList<String> inputArgs = new ArrayList<>(Arrays.asList(input.split(" ")));
 
-        if (inputString.size() != 2) {
+        if (inputArgs.size() != 2) {
             throw new InvalidArgumentException();
         }
-        String description = inputString.get(1);
+        String description = inputArgs.get(1);
         return new FindCommand(description);
     }
 

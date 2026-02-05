@@ -10,18 +10,18 @@ import jelly.ui.Ui;
 
 public class EventCommand extends Command {
     private final String description;
-    private final LocalDate from;
-    private final LocalDate to;
+    private final LocalDate fromDateTime;
+    private final LocalDate toDateTime;
 
-    public EventCommand(String description, LocalDate from, LocalDate to) {
+    public EventCommand(String description, LocalDate fromDateTime, LocalDate toDateTime) {
         this.description = description;
-        this.from = from;
-        this.to = to;
+        this.fromDateTime = fromDateTime;
+        this.toDateTime = toDateTime;
     }
 
     @Override
     public String execute(TaskList taskList, Ui ui, Storage storage) throws JellyException {
-        Event event = taskList.addEvent(description, from, to);
+        Event event = taskList.addEvent(description, fromDateTime, toDateTime);
         storage.write(taskList);
         return ui.showAddTask(event, taskList.getSize());
     }

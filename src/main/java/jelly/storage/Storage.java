@@ -98,16 +98,16 @@ public class Storage {
         String type = s[0];
         boolean isMark = s[1].equals("1");
         String desc = s[2];
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
         try {
             switch (type) {
             case "D":
-                LocalDate by = LocalDate.parse(s[3].substring(3).trim(), format);
+                LocalDate by = LocalDate.parse(s[3].substring(3).trim(), formatter);
                 task = new Deadline(desc, by);
                 break;
             case "E":
-                LocalDate from = LocalDate.parse(s[3].substring(5).trim(), format);
-                LocalDate to = LocalDate.parse(s[4].substring(3).trim(), format);
+                LocalDate from = LocalDate.parse(s[3].substring(5).trim(), formatter);
+                LocalDate to = LocalDate.parse(s[4].substring(3).trim(), formatter);
                 task = new Event(desc, from, to);
                 break;
             case "T":
@@ -116,7 +116,7 @@ public class Storage {
             default:
                 throw new InvalidFileCommandException("Unknown task type: " + type);
             }
-        } catch (Exception e) {
+        } catch (JellyException e) {
             throw new InvalidFileCommandException("Error parsing task: " + line);
         }
         if (isMark) {
