@@ -1,9 +1,6 @@
 package jelly;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
+import javafx.application.Platform;
 import jelly.command.Command;
 import jelly.exception.JellyException;
 import jelly.parser.Parser;
@@ -31,38 +28,20 @@ public class Jelly {
         }
     }
 
-    /**
-     * Run program
-     */
-    public void run() throws IOException {
-        printOutput(ui.showGreeting());
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        while (true) {
-            String input = br.readLine();
-            try {
-                Command command = parser.parse(input);
-                String output = command.execute(taskList, ui, storage);
-                printOutput(output);
-                if (command.isExit()) {
-                    break;
-                }
-            } catch (JellyException e) {
-                printOutput(ui.showError(e));
+    public String getResponse(String input) {
+        try {
+            Command command = parser.parse(input);
+            String response = command.execute(taskList, ui, storage);
+            if (command.isExit()) {
+                Platform.exit();
             }
+            return response;
+        } catch (JellyException e) {
+            return ui.showError(e);
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        new Jelly("data/Jelly.txt").run();
-    }
-
-    /**
-     * Prints out the line specified in the input param output.
-     *
-     * @param output String data to be outputted.
-     */
-    public void printOutput(String output) {
-        System.out.println(output);
+    public String getGreeting() {
+        return ui.showGreeting();
     }
 }
