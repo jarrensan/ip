@@ -31,10 +31,12 @@ public class Jelly {
     public String getResponse(String input) {
         try {
             Command command = parser.parse(input);
+            assert command != null : "Command should not be empty";
             String response = command.execute(taskList, ui, storage);
             if (command.isExit()) {
                 Platform.exit();
             }
+            assert response != null && !response.isEmpty() : "Response should not be empty";
             return response;
         } catch (JellyException e) {
             return ui.showError(e);

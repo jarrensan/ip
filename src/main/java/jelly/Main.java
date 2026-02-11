@@ -13,7 +13,8 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-    private final Jelly jelly = new Jelly("data/Jelly.txt");
+    private static final String DATA_PATH = "data/Jelly.txt";
+    private final Jelly jelly = new Jelly(DATA_PATH);
 
     @Override
     public void start(Stage stage) {
