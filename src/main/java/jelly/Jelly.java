@@ -19,6 +19,10 @@ public class Jelly {
         parser = new Parser();
         storage = new Storage();
 
+        loadStorage(filePath);
+    }
+
+    public void loadStorage(String filePath) {
         try {
             storage.create(filePath);
             taskList = storage.load();
