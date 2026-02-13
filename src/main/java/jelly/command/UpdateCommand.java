@@ -7,11 +7,13 @@ import jelly.task.Task;
 import jelly.task.TaskList;
 import jelly.ui.Ui;
 
-public class UnmarkCommand extends Command {
+public class UpdateCommand extends Command{
     private final int taskIndex;
+    private final String description;
 
-    public UnmarkCommand(int taskIndex) {
+    public UpdateCommand(int taskIndex, String description) {
         this.taskIndex = taskIndex;
+        this.description = description;
     }
 
     @Override
@@ -19,9 +21,8 @@ public class UnmarkCommand extends Command {
         if (this.taskIndex < 0 || this.taskIndex >= taskList.getSize()) {
             throw new InvalidTaskNumberException(this.taskIndex + 1);
         }
-
-        Task task = taskList.unmarkTask(taskIndex);
+        Task task = taskList.updateTask(taskIndex, description);
         storage.write(taskList);
-        return ui.showUnmarkTask(task);
+        return ui.showUpdateTask(task);
     }
 }
