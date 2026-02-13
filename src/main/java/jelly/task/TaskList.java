@@ -96,6 +96,12 @@ public class TaskList {
         return task;
     }
 
+    public Task updateTask(int index, String description) {
+        Task task = tasks.get(index);
+        task.updateDescription(description);
+        return task;
+    }
+
     /**
      * Returns size of the tasklist.
      *

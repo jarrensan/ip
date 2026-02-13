@@ -46,6 +46,10 @@ public class Ui {
         return h_line + " Here are the matching tasks in your list: " + taskList + h_line;
     }
 
+    public String showUpdateTask(Task task) {
+        return h_line + "OK, I've updated this task to: \n" + task + h_line;
+    }
+
     public String showDeleteTask(Task task, int taskSize) {
         return h_line
                 + "Noted. I've removed this task:\n   " + task
