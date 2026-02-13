@@ -13,6 +13,10 @@ public abstract class Task {
         return description;
     }
 
+    public void updateDescription(String newDesc) {
+        this.description = newDesc;
+    }
+
     public String getStatusIcon() {
         return (isDone ? "X" : " "); // mark done task with X
     }
