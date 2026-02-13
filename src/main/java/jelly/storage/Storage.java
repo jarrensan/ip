@@ -9,11 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import jelly.exception.CreateFileException;
-import jelly.exception.InvalidFileCommandException;
-import jelly.exception.JellyException;
-import jelly.exception.LoadFileException;
-import jelly.exception.WriteFileException;
+import jelly.exception.*;
 import jelly.task.Deadline;
 import jelly.task.Event;
 import jelly.task.Task;
@@ -91,23 +87,39 @@ public class Storage {
      */
     public Task getTask(String line) throws JellyException {
         Task task;
-        String[] s = line.split(" \\| ");
-        if (s.length < 3) {
+        String[] inputs = line.split(" \\| ");
+        if (inputs.length < 3) {
             throw new InvalidFileCommandException("Corrupted line: " + line);
         }
-        String type = s[0];
-        boolean isMark = s[1].equals("1");
-        String desc = s[2];
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
         try {
-            switch (type) {
+            task = selectTaskFromType(inputs);
+        } catch (JellyException e) {
+            throw new InvalidFileCommandException("Error parsing task: " + line);
+        }
+        return task;
+    }
+
+    /**
+     * Returns subclass of Task based on the raw string line specified in the data file.
+     *
+     * @param inputs The input string array read from the data file.
+     * @return Task with saved state.
+     * @throws InvalidFileCommandException If task type is unknown, or dates are not properly formatted.
+     */
+    public Task selectTaskFromType(String[] inputs) throws InvalidFileCommandException {
+        Task task;
+        String type = inputs[0];
+        String desc = inputs[2];
+        boolean isMark = inputs[1].equals("1");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+        switch (type) {
             case "D":
-                LocalDate by = LocalDate.parse(s[3].substring(3).trim(), formatter);
+                LocalDate by = LocalDate.parse(inputs[3].substring(3).trim(), formatter);
                 task = new Deadline(desc, by);
                 break;
             case "E":
-                LocalDate from = LocalDate.parse(s[3].substring(5).trim(), formatter);
-                LocalDate to = LocalDate.parse(s[4].substring(3).trim(), formatter);
+                LocalDate from = LocalDate.parse(inputs[3].substring(5).trim(), formatter);
+                LocalDate to = LocalDate.parse(inputs[4].substring(3).trim(), formatter);
                 task = new Event(desc, from, to);
                 break;
             case "T":
@@ -115,9 +127,6 @@ public class Storage {
                 break;
             default:
                 throw new InvalidFileCommandException("Unknown task type: " + type);
-            }
-        } catch (JellyException e) {
-            throw new InvalidFileCommandException("Error parsing task: " + line);
         }
         if (isMark) {
             task.markDone();

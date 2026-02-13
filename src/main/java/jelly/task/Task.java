@@ -29,6 +29,11 @@ public abstract class Task {
         isDone = false;
     }
 
+    /**
+     * Returns string data of task to be saved to file.
+     *
+     * @return String data of task.
+     */
     public String toSave() {
         return getSaveStatusIcon() + " | " + description;
     }

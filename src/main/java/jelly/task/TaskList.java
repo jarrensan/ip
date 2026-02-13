@@ -27,8 +27,8 @@ public class TaskList {
      * Returns and add Event task to existing arraylist of tasks from specified arguments.
      *
      * @param desc Description of Event task to be added.
-     * @param from Start date of Event task
-     * @param to End date of Event task
+     * @param from Start date of Event task.
+     * @param to End date of Event task.
      * @return Event task created from specified input arguments.
      */
     public Event addEvent(String desc, LocalDate from, LocalDate to) {
@@ -53,7 +53,7 @@ public class TaskList {
      * Returns and add Deadline task to existing arraylist of tasks from specified arguments.
      *
      * @param desc Description of Deadline task to be added.
-     * @param by Completion date of Deadline task
+     * @param by Completion date of Deadline task.
      * @return Deadline task created from specified input arguments.
      */
     public Deadline addDeadline(String desc, LocalDate by) {
@@ -65,7 +65,7 @@ public class TaskList {
     /**
      * Removes task from existing arraylist of tasks from specified index.
      *
-     * @param index Index of task to be removed
+     * @param index Index of task to be removed.
      * @return Task removed from tasks arraylist.
      */
     public Task removeTask(int index) {
@@ -75,7 +75,7 @@ public class TaskList {
     /**
      * Marks task as done from existing arraylist of tasks from specified index.
      *
-     * @param index Index of task to be marked
+     * @param index Index of task to be marked.
      * @return Task marked from tasks arraylist.
      */
     public Task markTask(int index) {
@@ -87,7 +87,7 @@ public class TaskList {
     /**
      * Unmarks task as done from existing arraylist of tasks from specified index.
      *
-     * @param index Index of task to be unmarked
+     * @param index Index of task to be unmarked.
      * @return Task unmarked from tasks arraylist.
      */
     public Task unmarkTask(int index) {
@@ -106,14 +106,20 @@ public class TaskList {
     }
 
     /**
-     * Returns true if tasklist is empty, else returns false
+     * Returns true if tasklist is empty, else returns false.
      *
-     * @return boolean indicating if tasklist is empty
+     * @return boolean indicating if tasklist is empty.
      */
     public boolean isEmpty() {
         return tasks.isEmpty();
     }
 
+    /**
+     * Returns taskList of all tasks with matching description
+     *
+     * @param desc Description of the task to find
+     * @return TaskList of all matching tasks
+     */
     public TaskList findTasks(String desc) {
         TaskList taskList = new TaskList();
         for (Task task : tasks) {
@@ -124,6 +130,11 @@ public class TaskList {
         return taskList;
     }
 
+    /**
+     * Returns all tasks in string format to save to file.
+     *
+     * @return String of tasks to be saved.
+     */
     public String toSaveString() {
         StringBuilder sb = new StringBuilder();
         for (Task t : tasks) {

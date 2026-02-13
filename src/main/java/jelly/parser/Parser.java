@@ -22,6 +22,7 @@ import jelly.exception.InvalidCommandException;
 import jelly.exception.InvalidDateException;
 import jelly.exception.JellyException;
 
+
 public class Parser {
     /**
      * Returns subclass of Command based on user's input.
@@ -179,6 +180,13 @@ public class Parser {
         return new DeleteCommand(index);
     }
 
+    /**
+     * Returns FindCommand based on user's input.
+     *
+     * @param input Raw string data from user's input.
+     * @return FindCommand with saved data.
+     * @throws InvalidArgumentException If unable to parse argument.
+     */
     public FindCommand findCommandEvent(String input) throws InvalidArgumentException {
         ArrayList<String> inputArgs = new ArrayList<>(Arrays.asList(input.split(" ")));
 

@@ -22,6 +22,11 @@ public class Jelly {
         loadStorage(filePath);
     }
 
+    /**
+     * Loads taskList with tasks from data in existing file.
+     *
+     * @param filePath path to existing file with data.
+     */
     public void loadStorage(String filePath) {
         try {
             storage.create(filePath);
@@ -32,6 +37,12 @@ public class Jelly {
         }
     }
 
+    /**
+     * Loads taskList with tasks from data in existing file.
+     *
+     * @param input from user 
+     * @return String response
+     */
     public String getResponse(String input) {
         try {
             Command command = parser.parse(input);
