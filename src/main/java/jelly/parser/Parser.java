@@ -190,9 +190,9 @@ public class Parser {
     }
 
     public UpdateCommand updateCommandEvent(String input) throws InvalidArgumentException {
-        ArrayList<String> inputArgs = new ArrayList<>(Arrays.asList(input.split(" ")));
+        ArrayList<String> inputArgs = new ArrayList<>(Arrays.asList(input.split(" ", 3)));
 
-        if (inputArgs.size() != 3) {
+        if (inputArgs.size() < 3) {
             throw new InvalidArgumentException();
         }
         int taskIndex = parseIndex(inputArgs.get(1));
