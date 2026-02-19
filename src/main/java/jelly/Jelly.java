@@ -58,6 +58,11 @@ public class Jelly {
         }
     }
 
+    /**
+     * Returns greeting response.
+     *
+     * @return String response
+     */
     public String getGreeting() {
         return ui.showGreeting();
     }

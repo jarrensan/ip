@@ -101,6 +101,16 @@ public class ParserTest {
     }
 
     @Test
+    public void parse_updateCommand_success() {
+        Parser parse = new Parser();
+        try {
+            assertInstanceOf(UpdateCommand.class, parse.parse("update 1 read book"));
+        } catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
     public void parse_wrongCommand_exceptionThrown() {
         Parser parse = new Parser();
         try {
