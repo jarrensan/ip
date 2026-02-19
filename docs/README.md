@@ -1,6 +1,6 @@
 # Jelly User Guide
 
-![](Screenshot.png)
+![](Ui.png)
 Jelly tasklist
 
 
